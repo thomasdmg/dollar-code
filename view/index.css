@@ -1,0 +1,49 @@
+h1{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 25px;
+}
+
+.logo{display: flex;align-items: center;flex-direction: row;}
+
+.logo img{
+    
+height: 60px;
+}
+
+.main-container{
+
+height: 100vh;
+
+display: flex;
+
+flex-direction: row;
+}
+
+.main-container .nav-bar{
+
+background-color: #98d69fe0;
+
+width: 25vw;
+
+max-width: 250px;
+
+min-width: 200px;
+}
+
+.main-container .nav-links{
+
+}
+
+.main-container .main-content{
+
+width: 75vh;
+}
+
+body{
+    
+margin: 0;
+    
+height: 100vh;
+    
+width: 100vw;
+}
