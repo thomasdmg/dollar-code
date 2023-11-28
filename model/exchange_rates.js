@@ -170,4 +170,8 @@ function getValue(currency, money){
     return res;
 }
 
-console.log(exchange_rate['USD'])
+var exchange_rate2 = {
+    
+}
+
+// console.log(exchange_rate['USD'])
