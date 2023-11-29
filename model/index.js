@@ -71,14 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         }
     
-      //   // Insère dans formationSelect les différentes formations possibles
-      //   formationSelect.innerHTML = '';
-      //   for (var key in formalEducationList) {
-      //     var option = document.createElement('option');
-      //     option.value = key;
-      //     option.text = formalEducationList[key];
-      //     formationSelect.appendChild(option);
-      //   }
       });
     
       submitButton.addEventListener('click', function() {
@@ -248,7 +240,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
 
-  
+    });
+
     submitButton2.addEventListener('click', function() {
       // Charge le fichier JSON correspondant à la zone géographique sélectionnée
       var jsonData2;
@@ -274,109 +267,32 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    // function processChartData2(jsonData) {
-    //   // Récupérer la liste l'expérience pour le pays sélectionné
-    //   var country = countrySelect2.value;
-    //   var experienceYearsList = [];
-
-    //   jsonData.forEach(function (item) {
-    //     experience = parseInt(item.YearsCodePro);
-    //     if (
-    //       item.Country === country &&
-    //       item.YearsCodePro != "NA" &&
-    //       item.Currency != "NA" &&
-    //       item.CompTotal != "NA"
-    //     ) {
-          
-    //       if (!experienceYearsList.includes(experience)) {
-    //         experienceYearsList.push(experience);
-    //       }
-          
-    //     }
-    //   });
-
-    //   experienceYearsList.sort(function(a, b){return a-b});
-    //   averageSalaryList2 = {};
-    //   experienceYearsList.forEach(function (year) {
-
-    //     var totalSalary = 0;
-    //     var i = 0;
-
-    //     jsonData.forEach(function (item) {
-    //       if (
-    //         item.Country === country &&
-    //         item.YearsCodePro == year &&
-    //         item.CompTotal != "NA" &&
-    //         item.Currency != "NA" &&
-    //         parseInt(item.CompTotal) < 1000000 &&
-    //         parseInt(item.CompTotal) > 1
-    //       ) {
-    //         devise = item.Currency.substring(0, 3);
-    //         annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-    //         totalSalary += annualSalary;
-    //         i++;
-    //       }
-    //     });
-    //     averageSalaryList2[year] = Math.round((totalSalary / i) / 12);        
-    //   });
-
-    //   // Supprime la valeur NaN
-    //   delete averageSalaryList2.NaN;
-    //   // console.log(experienceYearsList);
-    //   console.log(averageSalaryList2);
-      
-    //   // On crée un diagramme Line Styling avec les données récupérées
-    //   var ctx2 = document.getElementById("chart2").getContext("2d");
-
-    //   // S'il existe déjà un diagramme, le détruire
-    //   if (window.myChart2 && typeof window.myChart2.destroy === "function") {
-    //     window.myChart2.destroy();
-    //   }
-
-    //   window.myChart2 = new Chart(ctx2, {
-    //     type: "line",
-    //     data: {
-    //       labels: Object.keys(averageSalaryList2),
-    //       datasets: [
-    //         {
-    //           label: "Salaire moyen (EUR)",
-    //           data: Object.values(averageSalaryList2),
-    //           backgroundColor: "rgba(54, 162, 235, 0.5)",
-    //           borderColor: "rgba(54, 162, 235, 1)",
-    //           borderWidth: 1,
-    //           fill: true,
-    //         },
-    //       ],
-    //     },
-    //     options: {
-    //       scales: {
-    //         x: {
-    //           scaleLabel: {
-    //             display: true,
-    //             labelString: "Expérience en années"
-    //           },
-    //         },
-    //         y: {
-    //           scaleLabel: {
-    //             display: true,
-    //             labelString: "Salaire en €"
-    //           },
-    //           beginAtZero: true,
-    //         },
-    //       },
-    //     },
-    //   });
-      
-    // }
-
     //  -- BAR CHART WITH EXPERIENCE --
 
     function processChartData2(jsonData) {
       
+
+      var yearListOccurrence = {};
+      jsonData.forEach(function (item) {
+
+        if(item.YearsCodePro != "NA" && item.Currency != "NA" && item.CompTotal != "NA" && 
+        parseInt(item.CompTotal) < 1000000 && parseInt(item.CompTotal) > 1){
+          
+          if(item.YearsCodePro in yearListOccurrence){
+            yearListOccurrence[item.YearsCodePro] += 1;
+          }else{
+            yearListOccurrence[item.YearsCodePro] = 1;
+          }
+
+        }
+          
+      });
+
+      // console.log(yearListOccurrence);
+
       // Récupérer la liste l'expérience pour le pays sélectionné
       var country = countrySelect2.value;
-      var salaryYearsList = {};
-      var counterList = {};
+
 
       var salaryYearsList = {
         '0-5': 0,
@@ -388,7 +304,8 @@ document.addEventListener('DOMContentLoaded', function() {
         '30-35': 0,
         '35-40': 0,
         '40-45': 0,
-        '45-50': 0
+        '45-50': 0,
+        '50+': 0
       };
       
       var counterList = {
@@ -401,21 +318,25 @@ document.addEventListener('DOMContentLoaded', function() {
         '30-35': 0,
         '35-40': 0,
         '40-45': 0,
-        '45-50': 0
+        '45-50': 0,
+        '50+': 0
       };
 
       jsonData.forEach(function (item) {
+
         experience = parseInt(item.YearsCodePro);
+
         if (
           item.Country === country &&
           item.YearsCodePro != "NA" &&
           item.Currency != "NA" &&
           item.CompTotal != "NA" &&
           parseInt(item.CompTotal) < 1000000 &&
-          parseInt(item.CompTotal) > 1
+          parseInt(item.CompTotal) > 1 &&
+          yearListOccurrence[item.YearsCodePro] >= 15
         ) {
           
-          if(experience > 0 && experience <= 5){
+          if((experience > 0 && experience <= 5) || experience == "Less than 1 year"){
 
             devise = item.Currency.substring(0, 3);
             annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
@@ -485,134 +406,70 @@ document.addEventListener('DOMContentLoaded', function() {
             salaryYearsList['45-50'] += annualSalary;
             counterList['45-50'] += 1;
 
+          }else if (experience > 50){
+
+            devise = item.Currency.substring(0, 3);
+            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
+            salaryYearsList['50+'] += annualSalary;
+            counterList['50+'] += 1;
+
           }
 
-          
         }
 
       });
 
-    Object.keys(salaryYearsList).forEach(function (salary) {
-      salaryYearsList[salary] = Math.round((salaryYearsList[salary] / counterList[salary]) / 12);
-    });
-
-     console.log(salaryYearsList);
-    }
-
-
-    // function processChartData2(jsonData) {
-    //   // Récupérer la liste l'expérience pour le pays sélectionné
-    //   var country = countrySelect2.value;
-    //   var experienceYearsList = [];
-    //   var excludeYearsList = [];
-
-    //   jsonData.forEach(function (item) {
-    //     // Compte l'occurrence de chaque année d'expérience, par exemple pour yearsCodePro = 1, on aura 1: 1000, 2: 500, 3: 200, etc.
-    //     if (item.YearsCodePro !== "NA" && item.Country === country) {
-    //       if (item.YearsCodePro in excludeYearsList) {
-    //         excludeYearsList[item.YearsCodePro] += 1;
-    //       } else {
-    //         excludeYearsList[item.YearsCodePro] = 1;
-    //       }
-    //     }
-    //   });
-
-    //   console.log(excludeYearsList);
-      
-    //   jsonData.forEach(function (item) {
-    //     experience = parseInt(item.YearsCodePro);
-    //     if (
-    //       item.Country === country &&
-    //       item.YearsCodePro != "NA" &&
-    //       item.Currency != "NA" &&
-    //       item.CompTotal != "NA" &&
-    //       parseInt(item.CompTotal) < 1000000 &&
-    //       parseInt(item.CompTotal) > 1 &&
-    //       excludeYearsList[item.YearsCodePro] >= 15
-    //     ) {
-          
-    //       if (!experienceYearsList.includes(experience)) {
-    //         experienceYearsList.push(experience);
-    //       }
-          
-    //     }
-    //   });
-
-    //   experienceYearsList.sort(function(a, b){return a-b});
-    //   averageSalaryList2 = {};
-    //   experienceYearsList.forEach(function (year) {
-
-    //     var totalSalary = 0;
-    //     var i = 0;
-
-    //     jsonData.forEach(function (item) {
-    //       if (
-    //         item.Country === country &&
-    //         item.YearsCodePro == year &&
-    //         item.CompTotal != "NA" &&
-    //         item.Currency != "NA" &&
-    //         parseInt(item.CompTotal) < 1000000 &&
-    //         parseInt(item.CompTotal) > 1
-    //       ) {
-    //         devise = item.Currency.substring(0, 3);
-    //         annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-    //         totalSalary += annualSalary;
-    //         i++;
-    //       }
-    //     });
-    //     averageSalaryList2[year] = Math.round((totalSalary / i) / 12);        
-    //   });
-
-    //   // Supprime la valeur NaN
-    //   delete averageSalaryList2.NaN;
-    //   // console.log(experienceYearsList);
-    //   console.log(averageSalaryList2);
-      
-    //   // On crée un diagramme Line Styling avec les données récupérées
-    //   var ctx2 = document.getElementById("chart2").getContext("2d");
-
-    //   // S'il existe déjà un diagramme, le détruire
-    //   if (window.myChart2 && typeof window.myChart2.destroy === "function") {
-    //     window.myChart2.destroy();
-    //   }
-
-    //   window.myChart2 = new Chart(ctx2, {
-    //     type: "line",
-    //     data: {
-    //       labels: Object.keys(averageSalaryList2),
-    //       datasets: [
-    //         {
-    //           label: "Salaire moyen (EUR)",
-    //           data: Object.values(averageSalaryList2),
-    //           backgroundColor: "rgba(54, 162, 235, 0.5)",
-    //           borderColor: "rgba(54, 162, 235, 1)",
-    //           borderWidth: 1,
-    //           fill: true,
-    //         },
-    //       ],
-    //     },
-    //     options: {
-    //       scales: {
-    //         x: {
-    //           scaleLabel: {
-    //             display: true,
-    //             labelString: "Expérience en années"
-    //           },
-    //         },
-    //         y: {
-    //           scaleLabel: {
-    //             display: true,
-    //             labelString: "Salaire en €"
-    //           },
-    //           beginAtZero: true,
-    //         },
-    //       },
-    //     },
-    //   });
-      
-    // }
-
+      Object.keys(salaryYearsList).forEach(function (salary) {
     
-    
-  });
-});
+        salaryYearsList[salary] = Math.round((salaryYearsList[salary] / counterList[salary]) / 12);
+                      
+      });
+
+      //  console.log(salaryYearsList);
+
+      // On crée un diagramme Bar avec les données récupérées
+      var ctx2 = document.getElementById("chart2").getContext("2d");
+
+      // S'il existe déjà un diagramme, le détruire
+      if (window.myChart2 && typeof window.myChart2.destroy === "function") {
+        window.myChart2.destroy();
+      }
+
+
+
+      window.myChart2 = new Chart(ctx2, {
+        type: "bar",
+        data: {
+          labels: Object.keys(salaryYearsList),
+          datasets: [
+            {
+              label: "Salaire moyen (EUR)",
+              data: Object.values(salaryYearsList),
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: {
+              scaleLabel: {
+                display: true,
+                labelString: "Expérience en années"
+              },
+            },
+            y: {
+              scaleLabel: {
+                display: true,
+                labelString: "Salaire en €"
+              },
+              beginAtZero: true, 
+            },
+          },
+        }
+      });
+    }  
+});   
+
