@@ -32,17 +32,17 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // Liste des formations
     var formalEducationListKey = {
-      '': 'Choisir un niveau d\'étude',
-      'Primary/elementary school': 'Primary/Elementary school',
-      'Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)': 'Secondary School',
-      'Some college/university study without earning a degree': 'College / University without degree',
-      'Associate degree (A.A., A.S., etc.)': 'Associate degree',
-      'Bachelor\'s degree (B.A., B.S., B.Eng., etc.)': 'Bachelors degree',
-      'Master\'s degree (M.A., M.S., M.Eng., MBA, etc.)': 'Master\'s degree',
-      'Professional degree (JD, MD, Ph.D, Ed.D, etc.)': 'Professional degree',
-      'Something else': 'Others'
+      "Primary/elementary school": "Primary/Elementary school",
+      "Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)": "Secondary School",
+      "Some college/university study without earning a degree": "College / University without degree",
+      "Associate degree (A.A., A.S., etc.)": "Associate degree",
+      "Bachelor’s degree (B.A., B.S., B.Eng., etc.)" : "Bachelor's degree",
+      "Master’s degree (M.A., M.S., M.Eng., MBA, etc.)": "Master's degree",
+      "Professional degree (JD, MD, Ph.D, Ed.D, etc.)": "Professional degree",
+      "Something else": "Others"
     };
-  
+    
+
     // Chart1
       zoneSelect.addEventListener('change', function() {
         var zone = zoneSelect.value;
@@ -99,9 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       function processChartData(jsonData) {
+
         // Récupérer la liste des niveaux d'éducation formels pour le pays sélectionné
         var country = countrySelect.value;
         var formalEducationList = [];
+        var sortedSalaries = [];
 
         jsonData.forEach(function (item) {
           if (
@@ -129,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // et exclure les salaires avec la valeur "NA"
         var averageSalaryList = {};
         formalEducationList.forEach(function (formalEducation) {
+          var salaries = [];
           var totalSalary = 0;
           var i = 0;
           jsonData.forEach(function (item) {
@@ -137,16 +140,24 @@ document.addEventListener('DOMContentLoaded', function() {
               item.EdLevel === formalEducation &&
               item.CompTotal != "NA" &&
               item.ComptTotal != "NA" &&
+              item.Currency != "NA" &&
               parseInt(item.CompTotal) < 1000000 &&
               parseInt(item.CompTotal) > 1
             ) {
               devise = item.Currency.substring(0, 3);
               annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
+              salaries.push(annualSalary);
               totalSalary += annualSalary;
               i++;
             }
           });
-          averageSalaryList[formalEducation] = Math.round((totalSalary / i) / 12);
+
+          // Supprimer 5% des valeurs extrêmes
+          sortedSalaries = salaries.sort((a, b) => a - b);
+          var numToRemove = Math.ceil(0.10 * sortedSalaries.length);
+          var trimmedSalaries = sortedSalaries.slice(numToRemove, sortedSalaries.length - numToRemove);
+
+          averageSalaryList[formalEducation] = Math.round((trimmedSalaries.reduce((a, b) => a + b, 0) / trimmedSalaries.length) / 12);
         });
 
         // Tri des données par ordre croissant
@@ -155,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
         );
         averageSalaryList = Object.fromEntries(sortedAverageSalaryList);
 
-        // Créer un diagramme Combo bar/line avec les données récupérées
         var ctx = document.getElementById("chart").getContext("2d");
 
         // S'il existe déjà un diagramme, le détruire
@@ -169,11 +179,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Calculer la somme de tous les salaires et le nombre total de diplômes
         Object.values(averageSalaryList).forEach(function (salary) {
-          totalSum += salary;
-          totalCount++;
+          if (typeof salary === 'number' && !isNaN(salary)) {
+            totalSum += salary;
+            totalCount++;
+          }
         });
 
         var averageSalaryOverall = Math.round(totalSum / totalCount);
+
+        // Remplace les clés par des labels plus lisibles a partir de  formalEducationListKey
+        Object.keys(averageSalaryList).forEach(function (key) {
+          averageSalaryList[formalEducationListKey[key]] = averageSalaryList[key];
+          delete averageSalaryList[key];
+        });
+
+        // console.log(averageSalaryList);
 
         window.myChart = new Chart(ctx, {
           type: "bar,line",
@@ -205,6 +225,10 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: {
               y: {
                 beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Salaires Mensuel en €'
+                }
               },
             },
           },
@@ -213,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //Chart2
     zoneSelect2.addEventListener('change', function() {
+
       var zone = zoneSelect2.value;
       
       // Vide countrySelect2
