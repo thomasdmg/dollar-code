@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     // Chart1
+
       zoneSelect.addEventListener('change', function() {
         var zone = zoneSelect.value;
         // Vide countrySelect
@@ -104,13 +105,35 @@ document.addEventListener('DOMContentLoaded', function() {
         var country = countrySelect.value;
         var formalEducationList = [];
         var sortedSalaries = [];
+        var yearListOccurrence1 = {};
+
+        // On récupère le nombre de réponse enregistré par pays & diplome
+        jsonData.forEach(function (item) {
+
+          if(item.Country === country &&
+            item.EdLevel != "NA" &&
+            item.Currency != "NA" &&
+            item.CompTotal != "NA"){
+
+              if(item.EdLevel in yearListOccurrence1){
+                yearListOccurrence1[item.EdLevel] += 1;
+              }else{
+                yearListOccurrence1[item.EdLevel] = 1;
+              }
+
+          }
+          
+        });
+
+        console.log(yearListOccurrence1);
 
         jsonData.forEach(function (item) {
           if (
             item.Country === country &&
             item.EdLevel != "NA" &&
             item.Currency != "NA" &&
-            item.CompTotal != "NA"
+            item.CompTotal != "NA" &&
+            yearListOccurrence1[item.EdLevel] >= 15
           ) {
             var formalEducation = item.EdLevel;
             if (!formalEducationList.includes(formalEducation)) {
@@ -231,6 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
               },
             },
+            maintainAspectRatio: true,
+            responsive: false,
           },
         });
       }
@@ -361,6 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
           yearListOccurrence[item.YearsCodePro] >= 15
         ) {
           
+         
           if((experience > 0 && experience <= 5) || experience == "Less than 1 year"){
 
             devise = item.Currency.substring(0, 3);
@@ -368,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
             salaryYearsList['0-5'] += annualSalary;
             counterList['0-5'] += 1;
 
-          }else if(experience > 5 && experience <= 10){
+          }else if(experience > 5 && experience <= 10  ){
 
             devise = item.Currency.substring(0, 3);
             annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
@@ -443,6 +469,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
       });
+
+      console.log(salaryYearsList);
 
       Object.keys(salaryYearsList).forEach(function (salary) {
     
