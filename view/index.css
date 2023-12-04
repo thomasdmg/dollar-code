@@ -12,17 +12,16 @@ height: 60px;
 
 .main-container{
 
-height: 100vh;
+height: auto;
 
 display: flex;
 
 flex-direction: row;
-
 }
 
 .chart{
-    min-width: 600px;
-    min-height: 300px;
+    min-width: 90%;
+    min-height: auto;
 }
 
 .main-container .nav-bar{
@@ -34,6 +33,8 @@ width: 25vw;
 max-width: 210px;
 
 min-width: 210px;
+
+height: 100vh;
 }
 
 .main-container .nav-links{
@@ -44,7 +45,7 @@ min-width: 210px;
 
 width: 100%;
 
-height: 100%;
+height: 110%;
 
 display: flex;
 
@@ -65,3 +66,9 @@ height: 100vh;
     
 width: 100vw;
 }
+
+h2, h3, li{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+

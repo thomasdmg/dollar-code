@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
-        console.log(platformList);
+        // console.log(platformList);
 
         // On récupère le totalCompt par plateforme
         var averageSalaryPlatform = {};
@@ -169,18 +169,24 @@ document.addEventListener('DOMContentLoaded', function() {
           sortedAverageSalaryPlatform[item[0]] = item[1];
         });
 
-        console.log(sortedAverageSalaryPlatform);
+        // console.log(sortedAverageSalaryPlatform);
         
-        // Remplace les clés de sortedAverageSalaryPlatform par les valeurs de cloudPlatformListKey
-        Object.keys(sortedAverageSalaryPlatform).forEach(function(item){
-          if(sortedAverageSalaryPlatform.hasOwnProperty(item)){
-            
+        // On remplace les clés par les valeurs de cloudPlatformListKey
+        var updatedSortedAverageSalaryPlatform = {};
 
+        Object.keys(sortedAverageSalaryPlatform).forEach(function(item) {
+
+          if (cloudPlatformListKey[item]) {
+            
+            var updatedKey = cloudPlatformListKey[item];
+
+            updatedSortedAverageSalaryPlatform[updatedKey] = sortedAverageSalaryPlatform[item];
           }
         });
-        
 
-        console.log(sortedAverageSalaryPlatform);
+        // console.log(updatedSortedAverageSalaryPlatform);
+
+        
         
         // Crée un graphique avec les données récupérées chart.js
         var ctx = document.getElementById('chart').getContext('2d');
@@ -193,12 +199,12 @@ document.addEventListener('DOMContentLoaded', function() {
         chart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: Object.keys(sortedAverageSalaryPlatform),
+            labels: Object.keys(updatedSortedAverageSalaryPlatform),
             datasets: [{
               label: 'Salaire moyen / plateforme en €',
               backgroundColor: 'rgb(0, 128, 132)',
               borderColor: 'rgb(0, 99, 132)',
-              data: Object.values(sortedAverageSalaryPlatform)
+              data: Object.values(updatedSortedAverageSalaryPlatform)
             }]
           },
           options: {
