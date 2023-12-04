@@ -126,14 +126,15 @@ document.addEventListener('DOMContentLoaded', function() {
           var totalSalary = 0;
           var i = 0;
           jsonData.forEach(function (item) {
+            devise = item.Currency.substring(0, 3);
             if (
               item.Country === country &&
               item.EdLevel === formalEducation &&
               item.CompTotal != "NA" &&
               item.ComptTotal != "NA" &&
               item.Currency != "NA" &&
-              parseInt(item.CompTotal) < 1000000 &&
-              parseInt(item.CompTotal) > 1
+              parseInt(item.CompTotal) * exchange_rate[devise] < 1000000 &&
+              parseInt(item.CompTotal) > 0
             ) {
               devise = item.Currency.substring(0, 3);
               annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
@@ -290,9 +291,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
       var yearListOccurrence = {};
       jsonData.forEach(function (item) {
-
+        devise = item.Currency.substring(0, 3);
         if(item.YearsCodePro != "NA" && item.Currency != "NA" && item.CompTotal != "NA" && 
-        parseInt(item.CompTotal) < 1000000 && parseInt(item.CompTotal) > 1){
+        parseInt(item.CompTotal) * exchange_rate[devise] < 1000000 && parseInt(item.CompTotal) > 1){
           
           if(item.YearsCodePro in yearListOccurrence){
             yearListOccurrence[item.YearsCodePro] += 1;
@@ -312,14 +313,15 @@ document.addEventListener('DOMContentLoaded', function() {
       jsonData.forEach(function (item) {
 
         experience = parseInt(item.YearsCodePro);
+        devise = item.Currency.substring(0, 3);
 
         if (
           item.Country === country &&
           item.YearsCodePro != "NA" &&
           item.Currency != "NA" &&
           item.CompTotal != "NA" &&
-          parseInt(item.CompTotal) < 1000000 &&
-          parseInt(item.CompTotal) > 1 &&
+          parseInt(item.CompTotal) * exchange_rate[devise] < 1000000 &&
+          parseInt(item.CompTotal) > 0 &&
           yearListOccurrence[item.YearsCodePro] >= 15
         ) {
           

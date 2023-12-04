@@ -77,10 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
       function processChartData(jsonData) {
 
         var experience = experienceSelect.value;
-        var experience_min = experience.split("-")[0];
-        var experience_max = experience.split("-")[1];
+        var experience_min = parseInt(experience.split("-")[0]);
+        var experience_max = parseInt(experience.split("-")[1]);
         var country = countrySelect.value;
-        // var experience = experienceSelect.value;
 
         // On récupère les types de plateformes utilisées & le nombre de développeur par plateforme
         var platformList = {};
@@ -93,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             item.PlatformHaveWorkedWith !== "NA" &&
             item.YearsCodePro !== "NA" &&
             item.YearsCodePro >= experience_min &&
-            item.YearsCodePro <= experience_max
+            item.YearsCodePro < experience_max
           ) {
             var platforms = item.PlatformHaveWorkedWith.split(";");
             platforms.forEach(function (platform) {
@@ -109,22 +108,23 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
-        // console.log(platformList);
+        console.log(platformList);
 
         // On récupère le totalCompt par plateforme
         var averageSalaryPlatform = {};
 
         jsonData.forEach(function(item){
+          currency = item.Currency.substring(0, 3);
           if (
             item.Country === country &&
             item.Currency !== "NA" &&
             item.CompTotal !== "NA" &&
             parseInt(item.CompTotal) > 0 &&
-            parseInt(item.CompTotal) < 900000 &&
+            parseInt(item.CompTotal) * exchange_rate[currency] < 1000000 &&
             item.PlatformHaveWorkedWith !== "NA" &&
             item.YearsCodePro !== "NA" &&
             item.YearsCodePro >= experience_min &&
-            item.YearsCodePro <= experience_max
+            item.YearsCodePro < experience_max
           ) {
 
             Object.keys(platformList).forEach(function (platform) {
@@ -133,13 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (averageSalaryPlatform.hasOwnProperty(platform)) {
 
-                  currency = item.Currency.substring(0, 3);
                   amount_convert = item.CompTotal * exchange_rate[currency];
                   averageSalaryPlatform[platform] += parseInt(amount_convert);
 
                 } else {
 
-                  currency = item.Currency.substring(0, 3);
                   amount_convert = item.CompTotal * exchange_rate[currency];
                   averageSalaryPlatform[platform] = parseInt(amount_convert);
 
@@ -173,6 +171,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log(sortedAverageSalaryPlatform);
         
+        // Remplace les clés de sortedAverageSalaryPlatform par les valeurs de cloudPlatformListKey
+        Object.keys(sortedAverageSalaryPlatform).forEach(function(item){
+          if(sortedAverageSalaryPlatform.hasOwnProperty(item)){
+            
+
+          }
+        });
+        
+
+        console.log(sortedAverageSalaryPlatform);
+        
         // Crée un graphique avec les données récupérées chart.js
         var ctx = document.getElementById('chart').getContext('2d');
 
@@ -186,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
           data: {
             labels: Object.keys(sortedAverageSalaryPlatform),
             datasets: [{
-              label: 'Salaire moyen par mois',
+              label: 'Salaire moyen / plateforme en €',
               backgroundColor: 'rgb(0, 128, 132)',
               borderColor: 'rgb(0, 99, 132)',
               data: Object.values(sortedAverageSalaryPlatform)
@@ -211,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       var experience = experienceSelect.value;
       var country = countrySelect.value;
-      // var experience = experienceSelect.value;
 
       // On récupère les types de plateformes utilisées & le nombre de développeur par plateforme
       var platformList = {};
