@@ -11,38 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var submitButton2 = document.getElementById('submitButton2');
     var countrySelect2 = document.getElementById('countrySelect2');
 
-  
-    // Liste des pays zone EU
-    var countryListEU = [
-      'United Kingdom of Great Britain and Northern Ireland',
-      'Netherlands',
-      'Germany',
-      'France',
-      'Spain',
-      'Belgium',
-      'Italy',
-      'Portugal',
-      'Switzerland',
-      'Poland',
-      'Ireland'
-    ];
-  
-    // Liste des pays NA
-    var countryListNA = ['United States of America', 'Canada'];
-  
-    // Liste des formations
-    var formalEducationListKey = {
-      "Primary/elementary school": "Primary/Elementary school",
-      "Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)": "Secondary School",
-      "Some college/university study without earning a degree": "College / University without degree",
-      "Associate degree (A.A., A.S., etc.)": "Associate degree",
-      "Bachelor’s degree (B.A., B.S., B.Eng., etc.)" : "Bachelor's degree",
-      "Master’s degree (M.A., M.S., M.Eng., MBA, etc.)": "Master's degree",
-      "Professional degree (JD, MD, Ph.D, Ed.D, etc.)": "Professional degree",
-      "Something else": "Others"
-    };
-    
-
     // Chart1
 
       zoneSelect.addEventListener('change', function() {
@@ -254,8 +222,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
               },
             },
-            maintainAspectRatio: true,
-            responsive: false,
+            // maintainAspectRatio: true,
+            // responsive: false,
           },
         });
       }
@@ -317,8 +285,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
-    //  -- BAR CHART WITH EXPERIENCE --
-
     function processChartData2(jsonData) {
       
 
@@ -342,35 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Récupérer la liste l'expérience pour le pays sélectionné
       var country = countrySelect2.value;
-
-
-      var salaryYearsList = {
-        '0-5': 0,
-        '5-10': 0,
-        '10-15': 0,
-        '15-20': 0,
-        '20-25': 0,
-        '25-30': 0,
-        '30-35': 0,
-        '35-40': 0,
-        '40-45': 0,
-        '45-50': 0,
-        '50+': 0
-      };
-      
-      var counterList = {
-        '0-5': 0,
-        '5-10': 0,
-        '10-15': 0,
-        '15-20': 0,
-        '20-25': 0,
-        '25-30': 0,
-        '30-35': 0,
-        '35-40': 0,
-        '40-45': 0,
-        '45-50': 0,
-        '50+': 0
-      };
 
       jsonData.forEach(function (item) {
 
