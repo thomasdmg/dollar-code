@@ -1,5 +1,5 @@
 // Liste des pays zone EU
-var countryListEU = [
+const countryListEU = [
     'United Kingdom of Great Britain and Northern Ireland',
     'Netherlands',
     'Germany',
@@ -14,10 +14,10 @@ var countryListEU = [
   ];
 
   // Liste des pays NA
-  var countryListNA = ['United States of America', 'Canada'];
+  const countryListNA = ['United States of America', 'Canada'];
 
   // Liste des formations
-  var formalEducationListKey = {
+  const formalEducationListKey = {
     "Primary/elementary school": "Primary/Elementary school",
     "Secondary school (e.g. American high school, German Realschule or Gymnasium, etc.)": "Secondary School",
     "Some college/university study without earning a degree": "College / University without degree",
@@ -30,7 +30,7 @@ var countryListEU = [
 
 
   // Liste des plateformes cloud
-  var cloudPlatformListKey = {
+  const cloudPlatformListKey = {
     "Amazon Web Services (AWS)": "AWS",
     "Microsoft Azure": "Azure",
     "Cloudflare": "Cloudflare",
@@ -83,4 +83,41 @@ var countryListEU = [
     '40-45': 0,
     '45-50': 0,
     '50+': 0
+  };
+
+
+  const postList = {
+    "Academic researcher": "Academic researcher",
+    "Blockchain": "Blockchain",
+    "Cloud infrastructure engineer": "Cloud engineer",
+    "Data or business analyst": "Data analyst",
+    "Data scientist or machine learning specialist": "Data scientist",
+    "Database administrator": "Database admin",
+    "Designer": "Designer",
+    "Developer Advocate": "Developer Advocate",
+    "Developer Experience": "Dev Experience",
+    "Developer, QA or test": "Developer, QA",
+    "Developer, back-end": "Back-end dev",
+    "Developer, desktop or enterprise applications": "Desktop dev",
+    "Developer, embedded applications or devices": "Embedded dev",
+    "Developer, front-end": "Front-end dev",
+    "Developer, full-stack": "Full-stack dev",
+    "Developer, game or graphics": "Game & Graphics dev",
+    "Developer, mobile": "Mobile dev",
+    "DevOps specialist": "DevOps specialist",
+    "Educator": "Educator",
+    "Engineering manager": "Engineering manager",
+    "Engineer, data": "Data engineer",
+    "Engineer, site reliability": "Site reliability engineer",
+    "Hardware Engineer": "Hardware Engineer",
+    "Marketing or sales professional": "Marketing / Sales",
+    "Other (please specify):": "Other",
+    "Product manager": "Product manager",
+    "Project manager": "Project manager",
+    "Research & Development role": "R&D",
+    "Scientist": "Scientist",
+    "Security professional": "Security",
+    "Senior Executive (C-Suite, VP, etc.)": "Senior Executive",
+    "Student": "Student",
+    "System administrator": "System admin"
   };

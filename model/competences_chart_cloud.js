@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      // Graphique 1 : Moyenne par plateforme Cloud / Pays & Expérience
+      //Moyenne par plateforme Cloud / Pays & Expérience
       function processChartData(jsonData) {
 
         var experience = experienceSelect.value;
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var sortedArray = Object.entries(averageSalaryPlatform);
 
         sortedArray.sort(function(a, b) {
-          return a[1] - b[1];
+          return b[1] - a[1];
         });
 
         var sortedAverageSalaryPlatform = {};
@@ -221,18 +221,14 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
 
-    // Graphique 1 : Moyenne par plateforme Cloud tout pays confondus
-    function processgeneralChartData($jsonData){
-
-      var experience = experienceSelect.value;
-      var country = countrySelect.value;
+    // Moyenne par plateforme Cloud tout pays confondus
+    function processgeneralChartData(jsonData){
 
       // On récupère les types de plateformes utilisées & le nombre de développeur par plateforme
       var platformList = {};
 
       jsonData.forEach(function (item) {
         if (
-          item.Country === country &&
           item.EdLevel !== "NA" &&
           item.Currency !== "NA" &&
           item.CompTotal !== "NA" &&
@@ -252,14 +248,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      console.log(platformList);
+      // console.log(platformList);
 
       // On récupère le totalCompt par plateforme
       var averageSalaryPlatform = {};
 
       jsonData.forEach(function(item){
         if (
-          item.Country === country &&
           item.Currency !== "NA" &&
           item.CompTotal !== "NA" &&
           parseInt(item.CompTotal) > 0 &&
@@ -300,7 +295,61 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      console.log(averageSalaryPlatform);
+      var sortedArray = Object.entries(averageSalaryPlatform);
 
+      sortedArray.sort(function(a, b) {
+        return a[1] - b[1];
+      });
+
+      var sortedAverageSalaryPlatform = {};
+      sortedArray.forEach(function(item) {
+        sortedAverageSalaryPlatform[item[0]] = item[1];
+      });
+
+      // On remplace les clés par les valeurs de cloudPlatformListKey
+      var updatedSortedAverageSalaryPlatform = {};
+
+      Object.keys(sortedAverageSalaryPlatform).forEach(function(item) {
+
+         if (cloudPlatformListKey[item]) {
+           
+           var updatedKey = cloudPlatformListKey[item];
+
+           updatedSortedAverageSalaryPlatform[updatedKey] = sortedAverageSalaryPlatform[item];
+         }
+       });
+
+      // graphique
+
+       // Crée un graphique avec les données récupérées chart.js
+       var ctx = document.getElementById('chart').getContext('2d');
+
+       // S'il existe déjà un diagramme, le détruire
+       if (typeof myChart !== 'undefined' && myChart !== null) {
+         myChart.destroy();
+       }
+
+       chart = new Chart(ctx, {
+         type: 'bar',
+         data: {
+           labels: Object.keys(updatedSortedAverageSalaryPlatform),
+           datasets: [{
+             label: 'Salaire moyen / plateforme en €',
+             backgroundColor: 'rgb(0, 128, 132)',
+             borderColor: 'rgb(0, 99, 132)',
+             data: Object.values(updatedSortedAverageSalaryPlatform)
+           }]
+         },
+         options: {
+           scales: {
+             yAxes: {
+               ticks: {
+                 beginAtZero: true,
+               }
+             }
+           }
+         }
+       });
+       myChart = chart;
     }
 });

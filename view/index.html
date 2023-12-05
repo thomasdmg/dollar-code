@@ -27,6 +27,7 @@
                     <!-- Lien des différents graphiques -->
                     <a href="../view/index.html"><li>Experience / Etudes </li></a>
                     <a href="../view/competences.html"><li>Compétences</li></a>
+                    <a href="../view/preferences.html"><li>Préférences</li></a>
                 </ul>
             </div>
 
@@ -39,38 +40,40 @@
             <div class="chart">
                 <canvas id="chart"></canvas>
             </div>
-
-            <form>
-                <select id="zoneSelect">
-                    <option value="">Sélectionnez la zone géographique</option>
-                    <option value="WE">Europe</option>
-                    <option value="NA">Amérique du Nord</option>
-                </select>
-                <select id="countrySelect">
-                    <option value="">Sélectionnez le pays</option>
-                </select>
-                <!-- <select id="formationSelect">
-                    <option value="">Niveau d'étude</option>
-                </select> -->
-                <button type="button" id="submitButton">Rechercher</button>
-            </form>
+            <div class="filter-bar">
+                <form>
+                    <select id="zoneSelect">
+                        <option value="">Sélectionnez la zone géographique</option>
+                        <option value="WE">Europe</option>
+                        <option value="NA">Amérique du Nord</option>
+                    </select>
+                    <select id="countrySelect">
+                        <option value="">Sélectionnez le pays</option>
+                    </select>
+                    <!-- <select id="formationSelect">
+                        <option value="">Niveau d'étude</option>
+                    </select> -->
+                    <button type="button" id="submitButton">Rechercher</button>
+                </form>
+            </div>
             <h3>Salaire moyen en fonction du pays & de l'expérience</h3>
 
             <div class="chart">
                 <canvas id="chart2"></canvas>
             </div>
-             
-            <form>
-                <select id="zoneSelect2">
-                    <option value="">Sélectionnez la zone géographique</option>
-                    <option value="WE">Europe</option>
-                    <option value="NA">Amérique du Nord</option>
-                </select>
-                <select id="countrySelect2">
-                    <option value="">Sélectionnez le pays</option>
-                </select>
-                <button type="button" id="submitButton2">Rechercher</button>
-            </form>
+            <div class="filter-bar">
+                <form>
+                    <select id="zoneSelect2">
+                        <option value="">Sélectionnez la zone géographique</option>
+                        <option value="WE">Europe</option>
+                        <option value="NA">Amérique du Nord</option>
+                    </select>
+                    <select id="countrySelect2">
+                        <option value="">Sélectionnez le pays</option>
+                    </select>
+                    <button type="button" id="submitButton2">Rechercher</button>
+                </form>
+            </div>
         </div>
 
     </div>

@@ -6,8 +6,8 @@
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../view/index.css">
   
-  <script src="../model/competences_chart_cloud.js"></script>
-  <script src="../model/competences_chart_framework.js"></script>
+  <script src="../model/preferences_chart_communication.js"></script>
+  <script src="../model/preferences_chart_os.js"></script>
   
   <script src="../model/exchange_rates.js"></script>
   <script src="../model/const.js"></script>
@@ -41,74 +41,69 @@
         </div>
 
         <div class="main-content">
-            <h2>Compétences</h2>
-            <h3>Salaire moyen en fonction du pays, de l'expérience & des plateformes clouds utilisé</h3>
+
+            <h2>Préférences</h2>
+            <h4>*Pour chaque graphique, il y a possibilité de séléctionné ou non un poste en particulier</h4>
+            
+            <!-- Graphique 1 -->
+            <h3>Classement des OS les plus utilisé en fonction du poste en %</h3>
             <div class="chart">
                 <canvas id="chart"></canvas>
             </div>
             <div class="filter-bar">
                 <form>
+
                     <select id="zoneSelect">
                         <option value="">Sélectionnez la zone géographique</option>
                         <option value="WE">Europe</option>
                         <option value="NA">Amérique du Nord</option>
                     </select>
-                    <select id="countrySelect">
-                        <option value="">Sélectionnez le pays</option>
+
+                    <select id="jobSelect">
+                        <option value="">Type de poste</option>
                     </select>
-                    <select id="experienceSelect">
-                        <option value="">Années d'expériences</option>
-                        <option value="0-5">Entre 0 & 5 ans</option>
-                        <option value="5-10">Entre 5 & 10 ans</option>
-                        <option value="10-15">Entre 10 & 15 ans</option>
-                        <option value="15-20">Entre 15 & 20 ans</option>
-                        <option value="20-25">Entre 20 & 25 ans</option>
-                        <option value="25-30">Entre 25 & 30 ans</option>
-                        <option value="30-35">Entre 30 & 35 ans</option>
-                        <option value="35-40">Entre 35 & 40 ans</option>
-                        <option value="40-45">Entre 40 & 45 ans</option>
-                        <option value="45-50">Entre 45 & 50 ans</option>
+
+                    <select id="nbResultSelect">
+                        <option value="5">Top 5</option>
+                        <option value="6">Top 6</option>
+                        <option value="7">Top 7</option>
+                        <option value="8">Top 8</option>
                     </select>
+
                     <button type="button" id="submitButton">Rechercher</button>
                 </form>
             </div>
 
-            <h3>Salaire moyen en fonction du pays, de l'expérience & du framework utilisé</h3>
+            <!-- Graphique 2 -->
+            <h3>Classement des applications les plus utilisé en fonction du poste en %</h3>
             <div class="chart">
                 <canvas id="chart2"></canvas>
             </div>
             <div class="filter-bar">
-
                 <form>
+
                     <select id="zoneSelect2">
                         <option value="">Sélectionnez la zone géographique</option>
                         <option value="WE">Europe</option>
                         <option value="NA">Amérique du Nord</option>
                     </select>
-                    <select id="countrySelect2">
-                        <option value="">Sélectionnez le pays</option>
+
+                    <select id="jobSelect2">
+                        <option value="">Type de poste</option>
                     </select>
-                    <select id="experienceSelect2">
-                        <option value="">Années d'expériences</option>
-                        <option value="0-5">Entre 0 & 5 ans</option>
-                        <option value="5-10">Entre 5 & 10 ans</option>
-                        <option value="10-15">Entre 10 & 15 ans</option>
-                        <option value="15-20">Entre 15 & 20 ans</option>
-                        <option value="20-25">Entre 20 & 25 ans</option>
-                        <option value="25-30">Entre 25 & 30 ans</option>
-                        <option value="30-35">Entre 30 & 35 ans</option>
-                        <option value="35-40">Entre 35 & 40 ans</option>
-                        <option value="40-45">Entre 40 & 45 ans</option>
-                        <option value="45-50">Entre 45 & 50 ans</option>
+
+                    <select id="nbResultSelect2">
+                        <option value="5">Top 5</option>
+                        <option value="6">Top 6</option>
+                        <option value="7">Top 7</option>
+                        <option value="8">Top 8</option>
                     </select>
+
                     <button type="button" id="submitButton2">Rechercher</button>
                 </form>
-                
             </div>
-            
-        </div>
 
-    </div>
-</body>
+        </div>
+    </body>
 </html>
-                
+             

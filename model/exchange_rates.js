@@ -165,9 +165,4 @@ var exchange_rate = {
     "ZWL":6301.0166
 }
 
-function getValue(currency, money){
-    res = currency * exchange_rate[currency];
-    return res;
-}
-
 // console.log(exchange_rate['USD'])
