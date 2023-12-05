@@ -20,9 +20,10 @@ flex-direction: row;
 }
 
 .chart{
-    min-width: 90%;
+    min-width: 40%;
     min-height: auto;
     margin-bottom: 20px;
+    max-width: 250px;
 }
 
 .main-container .nav-bar{
@@ -68,7 +69,7 @@ height: 100vh;
 width: 100vw;
 }
 
-h2, h3, li{
+h2, h3, h4, li{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
