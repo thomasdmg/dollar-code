@@ -52,10 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
       function processChartData(jsonData) {
-
         var nbResultSelected = nbResult.value;
         var jobSelected = jobSelect.value;
-
+      
         let i = 0;
         
         var softwareList = getsoftwareList(jsonData, jobSelected);
@@ -65,8 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (var os in softwareList) {
           total += softwareList[os];
         }
-        // console.log(total);
-  
+        
         // Calcul du pourcentage de développeurs utilisant chaque OS
         var softwareListPercentage = {};
         for (var os in softwareList) {
@@ -80,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).forEach(function(key) {
           softwareListPercentageSorted[key] = softwareListPercentage[key];
         });
-  
+      
         // On modifie la taille du tableau en fonction du nombre de résultats sélectionnés
         var softwareListPercentageSortedSliced = {};
         let x = 0;
@@ -90,15 +88,28 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           x++;
         }
-  
+        
+        // Calcul le total des pourcentages des OS sélectionnés
+        var totalSelectedPercentage = 0;
+        for (var os in softwareListPercentageSortedSliced) {
+          totalSelectedPercentage += parseFloat(softwareListPercentageSortedSliced[os]);
+        }
+        
+        console.log(totalSelectedPercentage);
+      
+        // Si pourcentage < 100, on ajoute un OS "Autres"
+        if (totalSelectedPercentage < 100) {
+          softwareListPercentageSortedSliced["Autres"] = (100 - totalSelectedPercentage).toFixed(1);
+        }
+      
         // Création du graphique donuts
         var ctx = document.getElementById('chart2').getContext('2d');
-  
+      
         // S'il existe déjà un diagramme, le détruire
         if (typeof myChart2 !== 'undefined' && myChart2 !== null) {
           myChart2.destroy();
         }
-  
+      
         chart2 = new Chart(ctx, {
           type: 'doughnut',
           data: {
@@ -113,15 +124,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 'rgba(45, 106, 79, 1)',
                 'rgba(64, 145, 108, 1)',
                 'rgba(116, 198, 157, 1)',
-                'rgba(149, 213, 178, 0.4)'
-                    
+                'rgba(149, 213, 178, 0.6)',
+                'rgba(100, 190, 178, 0.2)'
               ]
             }]
           }
         });
-        
+      
         myChart2 = chart2;
-
       }
 
 
@@ -136,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
         for (var os in softwareList) {
           total += softwareList[os];
         }
-        // console.log(total);
   
         // Calcul du pourcentage de développeurs utilisant chaque OS
         var softwareListPercentage = {};
@@ -162,6 +171,19 @@ document.addEventListener('DOMContentLoaded', function() {
           x++;
         }
 
+         // Calcul le total des pourcentages des OS sélectionnés
+         var totalSelectedPercentage = 0;
+         for (var os in softwareListPercentageSortedSliced) {
+           totalSelectedPercentage += parseFloat(softwareListPercentageSortedSliced[os]);
+         }
+         
+         console.log(totalSelectedPercentage);
+       
+         // Si pourcentage < 100, on ajoute un OS "Autres"
+         if (totalSelectedPercentage < 100) {
+           softwareListPercentageSortedSliced["Autres"] = (100 - totalSelectedPercentage).toFixed(1);
+         }
+
         // Création du graphique donuts
         var ctx = document.getElementById('chart2').getContext('2d');
   
@@ -184,7 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 'rgba(45, 106, 79, 1)',
                 'rgba(64, 145, 108, 1)',
                 'rgba(116, 198, 157, 1)',
-                'rgba(149, 213, 178, 0.4)'
+                'rgba(149, 213, 178, 0.6)',
+                'rgba(100, 190, 178, 0.2)'
               ]
             }]
           }

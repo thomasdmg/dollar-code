@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
       for (var os in osList) {
         total += osList[os];
       }
-      console.log(total);
 
       // Calcul du pourcentage de développeurs utilisant chaque OS
       var osListPercentage = {};
@@ -88,7 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         x++;
       }
-
+      // Calcul le total des pourcentages des OS sélectionnés
+      var totalSelectedPercentage = 0;
+      for (var os in osListPercentageSortedSliced) {
+        totalSelectedPercentage += parseFloat(osListPercentageSortedSliced[os]);
+      }
+      
+      // Si pourcentage < 100, on ajoute un OS "Autres"
+      if (totalSelectedPercentage < 100) {
+        osListPercentageSortedSliced["Autres"] = (100 - Math.round(totalSelectedPercentage)).toFixed(1);
+      }
       // Création du graphique donuts
       var ctx = document.getElementById('chart').getContext('2d');
 
@@ -111,8 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
               'rgba(45, 106, 79, 1)',
               'rgba(64, 145, 108, 1)',
               'rgba(116, 198, 157, 1)',
-              'rgba(149, 213, 178, 0.4)'
-                  
+              'rgba(149, 213, 178, 0.6)',
+              'rgba(100, 190, 178, 0.2)'
             ]
           }]
         }
@@ -160,6 +168,17 @@ document.addEventListener('DOMContentLoaded', function() {
         x++;
       }
 
+      // Calcul le total des pourcentages des OS sélectionnés
+      var totalSelectedPercentage = 0;
+      for (var os in osListPercentageSortedSliced) {
+        totalSelectedPercentage += parseFloat(osListPercentageSortedSliced[os]);
+      }
+      
+      // Si pourcentage < 100, on ajoute un OS "Autres"
+      if (totalSelectedPercentage < 100) {
+        osListPercentageSortedSliced["Autres"] = (100 - Math.round(totalSelectedPercentage)).toFixed(1);
+      }
+
       // Création du graphique donuts
       var ctx = document.getElementById('chart').getContext('2d');
 
@@ -182,7 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
               'rgba(45, 106, 79, 1)',
               'rgba(64, 145, 108, 1)',
               'rgba(116, 198, 157, 1)',
-              'rgba(149, 213, 178, 0.4)' 
+              'rgba(149, 213, 178, 0.6)',
+              'rgba(100, 190, 178, 0.2)'
             ]
           }]
         }
