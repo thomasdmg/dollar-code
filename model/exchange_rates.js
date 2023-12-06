@@ -165,4 +165,8 @@ var exchange_rate = {
     "ZWL":6301.0166
 }
 
-// console.log(exchange_rate['USD'])
+function convert(item_amount, item_currency){
+    let currency = item_currency.substring(0, 3);
+    let res = parseInt(item_amount) * exchange_rate[currency];
+    return res;
+}

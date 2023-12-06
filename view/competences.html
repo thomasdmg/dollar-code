@@ -12,6 +12,8 @@
   <script src="../model/exchange_rates.js"></script>
   <script src="../model/const.js"></script>
 
+  <script src="../config/config.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,7 +45,8 @@
         <div class="main-content">
             <h2>Compétences</h2>
             <h3>Salaire moyen en fonction du pays, de l'expérience & des plateformes clouds utilisé</h3>
-            <div class="chart">
+            <h4>*Pour chaque graphique, il y a possibilité de séléctionné ou non le nombre d'années d'experience</h4>
+            <div class="chart_bar">
                 <canvas id="chart"></canvas>
             </div>
             <div class="filter-bar">
@@ -74,7 +77,7 @@
             </div>
 
             <h3>Salaire moyen en fonction du pays, de l'expérience & du framework utilisé</h3>
-            <div class="chart">
+            <div class="chart_bar">
                 <canvas id="chart2"></canvas>
             </div>
             <div class="filter-bar">

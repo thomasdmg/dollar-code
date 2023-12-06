@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    // Cible les éléments du DOM
     var zoneSelect = document.getElementById('zoneSelect2');
     var submitButton = document.getElementById('submitButton2');
     var jobSelect = document.getElementById('jobSelect2');
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (zoneSelect.value == 'WE') {
           $.ajax({
-            url: '../data/survey_results_WE.json',
+            url: survey_results_WE_path,
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         } else if (zoneSelect.value == 'NA') {
           $.ajax({
-            url: '../data/survey_results_NA.json',
+            url: survey_results_NA_path,
             dataType: 'json',
             success: function(data) {
                 jsonData = data;
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let i = 0;
         
         var softwareList = getsoftwareList(jsonData, jobSelected);
+        
         // Calcul du nombre total de développeurs
         var total = 0;
         for (var os in softwareList) {
@@ -122,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       }
 
+
       function processChartDataGeneral(jsonData){
 
         var nbResultSelected = nbResult.value;
@@ -158,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           x++;
         }
-  
+
         // Création du graphique donuts
         var ctx = document.getElementById('chart2').getContext('2d');
   
@@ -182,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 'rgba(64, 145, 108, 1)',
                 'rgba(116, 198, 157, 1)',
                 'rgba(149, 213, 178, 0.4)'
-                    
               ]
             }]
           }
@@ -236,7 +238,4 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(softwareList);
         return softwareList;
       }
-
-
-
 });

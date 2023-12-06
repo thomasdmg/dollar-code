@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Load the data from the JSON file en fonction de la zone géographique sélectionnée
   
-    // Crée les éléments HTML
+    // Cible les éléments HTML
     var zoneSelect = document.getElementById('zoneSelect');
     var submitButton = document.getElementById('submitButton');
     var countrySelect = document.getElementById('countrySelect');
-    // var formationSelect = document.getElementById('formationSelect');
 
     var zoneSelect2 = document.getElementById('zoneSelect2');
     var submitButton2 = document.getElementById('submitButton2');
@@ -45,10 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
       submitButton.addEventListener('click', function() {
         // Charge le fichier JSON correspondant à la zone géographique sélectionnée
         var jsonData;
-    
+      
         if (zoneSelect.value == 'WE') {
           $.ajax({
-            url: '../data/survey_results_WE.json',
+            url: survey_results_WE_path, 
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -57,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         } else if (zoneSelect.value == 'NA') {
           $.ajax({
-            url: '../data/survey_results_NA.json',
+            url: survey_results_NA_path, 
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -93,8 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
           
         });
 
-        console.log(yearListOccurrence1);
-
         jsonData.forEach(function (item) {
           if (
             item.Country === country &&
@@ -107,14 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!formalEducationList.includes(formalEducation)) {
               formalEducationList.push(formalEducation);
             }
-          }
-        });
-
-        var deviseList = [];
-        jsonData.forEach(function (item) {
-          var devise = item.Currency;
-          if (!deviseList.includes(devise) && item.Country === country) {
-            deviseList.push(devise);
           }
         });
 
@@ -133,11 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
               item.CompTotal != "NA" &&
               item.ComptTotal != "NA" &&
               item.Currency != "NA" &&
-              parseInt(item.CompTotal) * exchange_rate[devise] < 1000000 &&
+              convert(item.CompTotal, item.Currency) < 1000000 &&
               parseInt(item.CompTotal) > 0
             ) {
-              devise = item.Currency.substring(0, 3);
-              annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
+              annualSalary = convert(item.CompTotal, item.Currency);
               salaries.push(annualSalary);
               totalSalary += annualSalary;
               i++;
@@ -185,8 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
           delete averageSalaryList[key];
         });
 
-        // console.log(averageSalaryList);
-
         window.myChart = new Chart(ctx, {
           type: "bar,line",
           data: {
@@ -196,8 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 type: "bar",
                 label: "Salaire moyen (EUR)",
                 data: Object.values(averageSalaryList),
-                backgroundColor: "rgba(54, 162, 235, 0.5)",
-                borderColor: "rgba(54, 162, 235, 1)",
+                backgroundColor: "rgba(45, 198, 83, 0.6)",
+                borderColor: "rgba(45, 198, 83, 0.6)",
                 borderWidth: 1,
               },
               {
@@ -267,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
       if (zoneSelect2.value == 'WE') {
         $.ajax({
-          url: '../data/survey_results_WE.json',
+          url: survey_results_WE_path,
           dataType: 'json',
           success: function(data) {
             jsonData2 = data;
@@ -276,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       } else if (zoneSelect.value2 == 'NA') {
         $.ajax({
-          url: '../data/survey_results_NA.json',
+          url: survey_results_NA_path,
           dataType: 'json',
           success: function(data) {
             jsonData2 = data;
@@ -291,9 +277,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
       var yearListOccurrence = {};
       jsonData.forEach(function (item) {
-        devise = item.Currency.substring(0, 3);
+       
         if(item.YearsCodePro != "NA" && item.Currency != "NA" && item.CompTotal != "NA" && 
-        parseInt(item.CompTotal) * exchange_rate[devise] < 1000000 && parseInt(item.CompTotal) > 1){
+        convert(item.CompTotal, item.Currency) < 1000000 && parseInt(item.CompTotal) > 1){
           
           if(item.YearsCodePro in yearListOccurrence){
             yearListOccurrence[item.YearsCodePro] += 1;
@@ -313,121 +299,45 @@ document.addEventListener('DOMContentLoaded', function() {
       jsonData.forEach(function (item) {
 
         experience = parseInt(item.YearsCodePro);
-        devise = item.Currency.substring(0, 3);
-
+      
         if (
           item.Country === country &&
           item.YearsCodePro != "NA" &&
           item.Currency != "NA" &&
           item.CompTotal != "NA" &&
-          parseInt(item.CompTotal) * exchange_rate[devise] < 1000000 &&
+          convert(item.CompTotal, item.Currency) < 1000000 &&
           parseInt(item.CompTotal) > 0 &&
           yearListOccurrence[item.YearsCodePro] >= 15
         ) {
-          
-         
-          if((experience > 0 && experience <= 5) || experience == "Less than 1 year"){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['0-5'] += annualSalary;
-            counterList['0-5'] += 1;
-
-          }else if(experience > 5 && experience <= 10  ){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['5-10'] += annualSalary;
-            counterList['5-10'] += 1;
-
-          }else if(experience > 10 && experience <= 15){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['10-15'] += annualSalary;
-            counterList['10-15'] += 1;
-
-          }else if(experience > 15 && experience <= 20){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['15-20'] += annualSalary;
-            counterList['15-20'] += 1;
-
-          }else if(experience > 20 && experience <= 25){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['20-25'] += annualSalary;
-            counterList['20-25'] += 1;
-
-          }else if(experience > 25 && experience <= 30){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['25-30'] += annualSalary;
-            counterList['25-30'] += 1;
-
-          }else if(experience > 30 && experience <= 35){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['30-35'] += annualSalary;
-            counterList['30-35'] += 1;
-
-          }else if(experience > 35 && experience <= 40){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['35-40'] += annualSalary;
-            counterList['35-40'] += 1;
-
-          }else if(experience > 40 && experience <= 45){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['40-45'] += annualSalary;
-            counterList['40-45'] += 1;
-
-          }else if(experience > 45 && experience <= 50){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['45-50'] += annualSalary;
-            counterList['45-50'] += 1;
-
-          }else if (experience > 50){
-
-            devise = item.Currency.substring(0, 3);
-            annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
-            salaryYearsList['50+'] += annualSalary;
-            counterList['50+'] += 1;
-
+          for (const range in salaryYearsList) {
+            const [start, end] = range.split('-').map(Number);
+      
+            if (experience > start && experience <= end) {
+              // devise = item.Currency.substring(0, 3);
+              // annualSalary = parseInt(item.CompTotal) * exchange_rate[devise];
+              annualSalary = convert(item.CompTotal, item.Currency);
+              salaryYearsList[range] += annualSalary;
+              counterList[range] += 1;
+              break;
+            }
           }
-
         }
-
       });
-
+      
       console.log(salaryYearsList);
 
       Object.keys(salaryYearsList).forEach(function (salary) {
-    
         salaryYearsList[salary] = Math.round((salaryYearsList[salary] / counterList[salary]) / 12);
-                      
+        counterList[salary] = 0; 
       });
 
-      //  console.log(salaryYearsList);
-
-      // On crée un diagramme Bar avec les données récupérées
+      // On instancie un diagramme Bar avec les données récupérées
       var ctx2 = document.getElementById("chart2").getContext("2d");
 
       // S'il existe déjà un diagramme, le détruire
       if (window.myChart2 && typeof window.myChart2.destroy === "function") {
         window.myChart2.destroy();
       }
-
-
 
       window.myChart2 = new Chart(ctx2, {
         type: "bar",
@@ -437,8 +347,8 @@ document.addEventListener('DOMContentLoaded', function() {
             {
               label: "Salaire moyen (EUR)",
               data: Object.values(salaryYearsList),
-              backgroundColor: "rgba(54, 162, 235, 0.5)",
-              borderColor: "rgba(54, 162, 235, 1)",
+              backgroundColor: "rgba(45, 198, 83, 0.6)",
+              borderColor: "rgba(45, 198, 83, 0.6)",
               borderWidth: 1,
               fill: true,
             },

@@ -2,14 +2,21 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../view/index.css">
+
   <script src="../model/index.js"></script>
   <script src="../model/exchange_rates.js"></script>
   <script src="../model/const.js"></script>
+  
+  <script src="../config/config.js"></script>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>Dollar-code</title>
 </head>
 <body>
@@ -37,7 +44,7 @@
             <h2>Experience & Etudes</h2>
             <h3>Salaire moyen en fonction du pays & du niveau d'étude</h3>
 
-            <div class="chart">
+            <div class="chart_bar">
                 <canvas id="chart"></canvas>
             </div>
             <div class="filter-bar">
@@ -47,18 +54,17 @@
                         <option value="WE">Europe</option>
                         <option value="NA">Amérique du Nord</option>
                     </select>
+                    
                     <select id="countrySelect">
                         <option value="">Sélectionnez le pays</option>
                     </select>
-                    <!-- <select id="formationSelect">
-                        <option value="">Niveau d'étude</option>
-                    </select> -->
+                   
                     <button type="button" id="submitButton">Rechercher</button>
                 </form>
             </div>
             <h3>Salaire moyen en fonction du pays & de l'expérience</h3>
 
-            <div class="chart">
+            <div class="chart_bar">
                 <canvas id="chart2"></canvas>
             </div>
             <div class="filter-bar">

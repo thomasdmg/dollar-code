@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (zoneSelect.value == 'WE') {
           $.ajax({
-            url: '../data/survey_results_WE.json',
+            url: survey_results_WE_path,
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         } else if (zoneSelect.value == 'NA') {
           $.ajax({
-            url: '../data/survey_results_NA.json',
+            url: survey_results_NA_path,
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
            item.Currency !== "NA" &&
            item.CompTotal !== "NA" &&
            parseInt(item.CompTotal) > 0 &&
-           parseInt(item.CompTotal) * exchange_rate[currency] < 1000000 &&
+           convert(item.CompTotal, item.Currency) < 1000000 &&
            item.WebframeHaveWorkedWith !== "NA" &&
            item.YearsCodePro !== "NA" &&
            item.YearsCodePro >= experience_min &&
@@ -131,12 +131,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
                if (averageSalaryFramework.hasOwnProperty(framework)) {
 
-                 amount_convert = item.CompTotal * exchange_rate[currency];
+                 amount_convert = convert(item.CompTotal, item.Currency);
                  averageSalaryFramework[framework] += parseInt(amount_convert);
 
                } else {
 
-                 amount_convert = item.CompTotal * exchange_rate[currency];
+                 amount_convert = convert(item.CompTotal, item.Currency);
                  averageSalaryFramework[framework] = parseInt(amount_convert);
 
                }
@@ -180,8 +180,8 @@ document.addEventListener('DOMContentLoaded', function() {
           labels: Object.keys(sortedaverageSalaryFramework),
           datasets: [{
             label: 'Salaire moyen / plateforme en €',
-            backgroundColor: 'rgb(0, 128, 132)',
-            borderColor: 'rgb(0, 99, 132)',
+            backgroundColor: "rgba(45, 198, 83, 0.6)",
+            borderColor: "rgba(45, 198, 83, 0.6)",
             data: Object.values(sortedaverageSalaryFramework)
           }]
         },
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
            item.Currency !== "NA" &&
            item.CompTotal !== "NA" &&
            parseInt(item.CompTotal) > 0 &&
-           parseInt(item.CompTotal) * exchange_rate[currency] < 1000000 &&
+           convert(item.CompTotal, item.Currency) < 1000000 &&
            item.WebframeHaveWorkedWith !== "NA" &&
            item.YearsCodePro !== "NA"
          ) {
@@ -252,12 +252,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
                if (averageSalaryFramework.hasOwnProperty(framework)) {
 
-                 amount_convert = item.CompTotal * exchange_rate[currency];
+                 amount_convert = convert(item.CompTotal, item.Currency);
                  averageSalaryFramework[framework] += parseInt(amount_convert);
 
                } else {
 
-                 amount_convert = item.CompTotal * exchange_rate[currency];
+                 amount_convert = convert(item.CompTotal, item.Currency);
                  averageSalaryFramework[framework] = parseInt(amount_convert);
 
                }
@@ -301,8 +301,8 @@ document.addEventListener('DOMContentLoaded', function() {
           labels: Object.keys(sortedaverageSalaryFramework),
           datasets: [{
             label: 'Salaire moyen / plateforme en €',
-            backgroundColor: 'rgb(0, 128, 132)',
-            borderColor: 'rgb(0, 99, 132)',
+            backgroundColor: "rgba(45, 198, 83, 0.6)",
+            borderColor: "rgba(45, 198, 83, 0.6)",
             data: Object.values(sortedaverageSalaryFramework)
           }]
         },

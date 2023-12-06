@@ -20,10 +20,15 @@ flex-direction: row;
 }
 
 .chart{
-    min-width: 40%;
-    min-height: auto;
+    min-width: 450px;
     margin-bottom: 20px;
-    max-width: 250px;
+    max-width: 600px;
+}
+
+.chart_bar{
+    min-width: 600px;
+    margin-bottom: 20px;
+    max-width: 800px;
 }
 
 .main-container .nav-bar{
@@ -77,5 +82,6 @@ h2, h3, h4, li{
     
 margin-bottom: 30px;
 }
+
 
 

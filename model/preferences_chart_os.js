@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (zoneSelect.value == 'WE') {
           $.ajax({
-            url: '../data/survey_results_WE.json',
+            url: survey_results_WE_path,
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         } else if (zoneSelect.value == 'NA') {
           $.ajax({
-            url: '../data/survey_results_NA.json',
+            url: survey_results_NA_path,
             dataType: 'json',
             success: function(data) {
                 jsonData = data;

@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         if (zoneSelect.value == 'WE') {
           $.ajax({
-            url: '../data/survey_results_WE.json',
+            url: survey_results_WE_path,
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         } else if (zoneSelect.value == 'NA') {
           $.ajax({
-            url: '../data/survey_results_NA.json',
+            url: survey_results_NA_path,
             dataType: 'json',
             success: function(data) {
               jsonData = data;
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             item.Currency !== "NA" &&
             item.CompTotal !== "NA" &&
             parseInt(item.CompTotal) > 0 &&
-            parseInt(item.CompTotal) * exchange_rate[currency] < 1000000 &&
+            convert(item.CompTotal, item.Currency) < 1000000 &&
             item.PlatformHaveWorkedWith !== "NA" &&
             item.YearsCodePro !== "NA" &&
             item.YearsCodePro >= experience_min &&
@@ -133,12 +133,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (averageSalaryPlatform.hasOwnProperty(platform)) {
 
-                  amount_convert = item.CompTotal * exchange_rate[currency];
+                  amount_convert = convert(item.CompTotal, item.Currency);
                   averageSalaryPlatform[platform] += parseInt(amount_convert);
 
                 } else {
 
-                  amount_convert = item.CompTotal * exchange_rate[currency];
+                  amount_convert = convert(item.CompTotal, item.Currency);
                   averageSalaryPlatform[platform] = parseInt(amount_convert);
 
                 }
@@ -202,8 +202,8 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: Object.keys(updatedSortedAverageSalaryPlatform),
             datasets: [{
               label: 'Salaire moyen / plateforme en €',
-              backgroundColor: 'rgb(0, 128, 132)',
-              borderColor: 'rgb(0, 99, 132)',
+              backgroundColor: "rgba(45, 198, 83, 0.6)",
+              borderColor: "rgba(45, 198, 83, 0.6)",
               data: Object.values(updatedSortedAverageSalaryPlatform)
             }]
           },
@@ -226,13 +226,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // On récupère les types de plateformes utilisées & le nombre de développeur par plateforme
       var platformList = {};
+      var country = countrySelect.value;
 
       jsonData.forEach(function (item) {
         if (
           item.EdLevel !== "NA" &&
           item.Currency !== "NA" &&
           item.CompTotal !== "NA" &&
-          item.PlatformHaveWorkedWith !== "NA"
+          item.PlatformHaveWorkedWith !== "NA" &&
+          item.Country === country 
         ) {
           var platforms = item.PlatformHaveWorkedWith.split(";");
           platforms.forEach(function (platform) {
@@ -258,9 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
           item.Currency !== "NA" &&
           item.CompTotal !== "NA" &&
           parseInt(item.CompTotal) > 0 &&
-          parseInt(item.CompTotal) < 900000 &&
+          convert(item.CompTotal, item.Currency) < 900000 &&
           item.PlatformHaveWorkedWith !== "NA" &&
-          item.YearsCodePro !== "NA"
+          item.YearsCodePro !== "NA" &&
+          item.Country === country 
         ) {
 
           Object.keys(platformList).forEach(function (platform) {
@@ -270,13 +273,13 @@ document.addEventListener('DOMContentLoaded', function() {
               if (averageSalaryPlatform.hasOwnProperty(platform)) {
 
                 currency = item.Currency.substring(0, 3);
-                amount_convert = item.CompTotal * exchange_rate[currency];
+                amount_convert = convert(item.CompTotal, item.Currency);
                 averageSalaryPlatform[platform] += parseInt(amount_convert);
 
               } else {
 
                 currency = item.Currency.substring(0, 3);
-                amount_convert = item.CompTotal * exchange_rate[currency];
+                amount_convert = convert(item.CompTotal, item.Currency);
                 averageSalaryPlatform[platform] = parseInt(amount_convert);
 
               }
@@ -298,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var sortedArray = Object.entries(averageSalaryPlatform);
 
       sortedArray.sort(function(a, b) {
-        return a[1] - b[1];
+        return b[1] - a[1];
       });
 
       var sortedAverageSalaryPlatform = {};
@@ -335,8 +338,8 @@ document.addEventListener('DOMContentLoaded', function() {
            labels: Object.keys(updatedSortedAverageSalaryPlatform),
            datasets: [{
              label: 'Salaire moyen / plateforme en €',
-             backgroundColor: 'rgb(0, 128, 132)',
-             borderColor: 'rgb(0, 99, 132)',
+             backgroundColor: "rgba(45, 198, 83, 0.6)",
+             borderColor: "rgba(45, 198, 83, 0.6)",
              data: Object.values(updatedSortedAverageSalaryPlatform)
            }]
          },
