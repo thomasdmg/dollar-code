@@ -106,12 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
-      // On récupère le totalCompt par framework
+        // On récupère le totalCompt par framework
        var averageSalaryFramework = {};
 
        jsonData.forEach(function(item){
-
-         currency = item.Currency.substring(0, 3);
 
          if (
            item.Country === country &&
@@ -120,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
            parseInt(item.CompTotal) > 0 &&
            convert(item.CompTotal, item.Currency) < 1000000 &&
            item.WebframeHaveWorkedWith !== "NA" &&
-           item.YearsCodePro !== "NA" &&
+           item.YearsCodePro !== "NA" && 
            item.YearsCodePro >= experience_min &&
            item.YearsCodePro < experience_max
          ) {
@@ -145,6 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
          }
        });
 
+      //  console.log(frameworkList);
+
        // On calcule la moyenne par plateforme
        Object.keys(averageSalaryFramework).forEach(function(item){
         if (averageSalaryFramework.hasOwnProperty(item)) {
@@ -164,9 +164,68 @@ document.addEventListener('DOMContentLoaded', function() {
           sortedaverageSalaryFramework[item[0]] = item[1];
         });
 
-        console.log(sortedaverageSalaryFramework);
+        // Calcul de la médiane pour chaque framework
+        var listSalaryPerFramework = {};
 
-        // Crée un graphique avec les données récupérées chart.js
+        jsonData.forEach(function(item) {
+          if (
+            item.Country === country &&
+            item.Currency !== "NA" &&
+            item.CompTotal !== "NA" &&
+            parseInt(item.CompTotal) > 0 &&
+            convert(item.CompTotal, item.Currency) < 1000000 &&
+            item.WebframeHaveWorkedWith !== "NA" &&
+            item.YearsCodePro !== "NA" &&
+            item.YearsCodePro >= experience_min &&
+            item.YearsCodePro < experience_max
+          ) {
+            Object.keys(frameworkList).forEach(function(framework) {
+              if (item.WebframeHaveWorkedWith.includes(framework)) {
+                if (listSalaryPerFramework.hasOwnProperty(framework)) {
+                  listSalaryPerFramework[framework].push(Math.round(convert(item.CompTotal, item.Currency)/12));
+                } else {
+                  listSalaryPerFramework[framework] = [Math.round(convert(item.CompTotal, item.Currency)/12)];
+                }
+              }
+            });
+          }
+        });
+
+        // Trie les salaires de chaque framework par ordre croissant
+        Object.keys(listSalaryPerFramework).forEach(function(framework) {
+          listSalaryPerFramework[framework].sort(function(a, b) {
+            return b - a;
+          });
+        });
+
+        console.log(listSalaryPerFramework);
+
+        // Si le nombre de salaires est impair, la médiane est le salaire du milieu sinon c'est la moyenne des 2 salaires du milieu
+        var medianSalaryPerFramework = {};
+        Object.keys(listSalaryPerFramework).forEach(function(framework) {
+          var list = listSalaryPerFramework[framework];
+          var median;
+          if (parseInt(list.length % 2) === 0) {
+            median = (list[list.length / 2 - 1] + list[list.length / 2]) / 2;
+          } else {
+            median = list[Math.floor(list.length / 2)];
+          }
+          medianSalaryPerFramework[framework] = median;
+        });
+        
+        // console.log(medianSalaryPerFramework);
+
+        //On un objet avec une clé associée à plusieurs valeurs
+        var finalList = {};
+        Object.keys(sortedaverageSalaryFramework).forEach(function(framework) {
+          if (listSalaryPerFramework[framework].length >= 10) {
+            finalList[framework] = [sortedaverageSalaryFramework[framework], medianSalaryPerFramework[framework]];
+          }
+        });
+
+        console.log(Object.values(finalList));
+
+      // Crée un graphique avec les données récupérées chart.js
       var ctx = document.getElementById('chart2').getContext('2d');
 
       // S'il existe déjà un diagramme, le détruire
@@ -175,29 +234,89 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       chart = new Chart(ctx, {
-        type: 'bar',
+        type: "bar,line",
         data: {
-          labels: Object.keys(sortedaverageSalaryFramework),
-          datasets: [{
-            label: 'Salaire moyen / plateforme en €',
-            backgroundColor: "rgba(45, 198, 83, 0.6)",
-            borderColor: "rgba(45, 198, 83, 0.6)",
-            data: Object.values(sortedaverageSalaryFramework)
-          }]
+          labels: Object.keys(finalList),
+          datasets: [
+            {
+              type: "bar",
+              label: "Salaire moyen (EUR)",
+              data: Object.values(finalList).map(function (values) {
+                          return values[0]; 
+                        }),
+              backgroundColor: "rgba(45, 198, 83, 0.6)",
+              borderColor: "rgba(45, 198, 83, 0.6)",
+              borderWidth: 1,
+            },
+            {
+              type: "line",
+              label: "Médiane (EUR)",
+              data: Object.values(finalList).map(function (values) {
+                    return values[1];
+                  }),
+              backgroundColor: "rgba(255, 0, 0, 0.5)",
+              borderColor: "rgba(255, 0, 0, 1)",
+              borderWidth: 1,
+              fill: false,
+            },
+          ],
         },
         options: {
           scales: {
-            yAxes: {
-              ticks: {
-                beginAtZero: true,
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Salaires Mensuel en €'
               }
-            }
-          }
-        }
+            },
+          },
+          // maintainAspectRatio: true,
+          // responsive: false,
+        },
       });
+
+      // chart = new Chart(ctx, {
+      //   type: 'bar', 
+      //   data: {
+      //     labels: Object.keys(finalList),
+      //     datasets: [
+      //       {
+      //         label: 'Salaire moyen / plateforme en €',
+      //         backgroundColor: "rgba(45, 198, 83, 0.6)",
+      //         borderColor: "rgba(45, 198, 83, 0.6)",
+      //         data: Object.values(finalList).map(function (values) {
+      //           return values[0]; 
+      //         })
+      //       }
+      //     ]
+      //   },
+      //   options: {
+      //     scales: {
+      //       yAxes: [{
+      //         ticks: {
+      //           beginAtZero: true,
+      //         }
+      //       }]
+      //     }
+      //   }
+      // });
+      
+      // // Ajouter une seconde série de données pour représenter la médiane en ligne
+      // chart.data.datasets.push({
+      //   type: 'line', // Utiliser le type "line" pour représenter la médiane par une ligne
+      //   label: 'Salaire médian / plateforme en €',
+      //   fill: false,
+      //   backgroundColor: "rgba(54, 162, 235, 0.6)",
+      //   borderColor: "rgba(54, 162, 235, 0.6)",
+      //   data: Object.values(finalList).map(function (values) {
+      //     return values[1];
+      //   })
+      // });
+      
+      // chart.update(); // Mettre à jour le graphique pour refléter les modifications
       
       myChart2 = chart;
-
       }
 
       function processgeneralChartData(jsonData){
