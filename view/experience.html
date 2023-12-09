@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
   <meta charset="UTF-8">
+  
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../view/index.css">
-  
-  <script src="../model/preferences_chart_communication.js"></script>
-  <script src="../model/preferences_chart_os.js"></script>
-  
+
+  <script src="../model/etude_chart.js"></script>
+  <script src="../model/experience_chart.js"></script>
+
   <script src="../model/exchange_rates.js"></script>
   <script src="../model/const.js"></script>
-
+  
   <script src="../config/config.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  
   <title>Dollar-code</title>
-
 </head>
 <body>
     <div class="main-container">
@@ -44,72 +44,48 @@
         </div>
 
         <div class="main-content">
+            <h2>Experience & Etudes</h2>
+            <h3>Salaire moyen en fonction du pays & du niveau d'étude</h3>
 
-            <h2>Préférences</h2>
-            <p> 
-                <strong>Remarque :</strong> </br></br>
-                Pour chaque graphique, il y a possibilité ou non de séléctionné ou non un poste en particulier
-            </p>
-            
-            <!-- Graphique 1 -->
-            <h3>Classement des OS les plus utilisé en fonction du poste en %</h3>
-            <div class="chart">
+            <div class="chart_bar">
                 <canvas id="chart"></canvas>
             </div>
             <div class="filter-bar">
                 <form>
-
                     <select id="zoneSelect">
                         <option value="">Sélectionnez la zone géographique</option>
                         <option value="WE">Europe</option>
                         <option value="NA">Amérique du Nord</option>
                     </select>
-
-                    <select id="jobSelect">
-                        <option value="">Type de poste</option>
+                    
+                    <select id="countrySelect">
+                        <option value="">Sélectionnez le pays</option>
                     </select>
-
-                    <select id="nbResultSelect">
-                        <option value="5">Top 5</option>
-                        <option value="6">Top 6</option>
-                        <option value="7">Top 7</option>
-                        <option value="8">Top 8</option>
-                    </select>
-
+                   
                     <button type="button" id="submitButton">Rechercher</button>
                 </form>
             </div>
+            <h3>Salaire moyen en fonction du pays & de l'expérience</h3>
 
-            <!-- Graphique 2 -->
-            <h3>Classement des applications les plus utilisé en fonction du poste en %</h3>
-            <div class="chart">
+            <div class="chart_bar">
                 <canvas id="chart2"></canvas>
             </div>
             <div class="filter-bar">
                 <form>
-
                     <select id="zoneSelect2">
                         <option value="">Sélectionnez la zone géographique</option>
                         <option value="WE">Europe</option>
                         <option value="NA">Amérique du Nord</option>
                     </select>
-
-                    <select id="jobSelect2">
-                        <option value="">Type de poste</option>
+                    <select id="countrySelect2">
+                        <option value="">Sélectionnez le pays</option>
                     </select>
-
-                    <select id="nbResultSelect2">
-                        <option value="5">Top 5</option>
-                        <option value="6">Top 6</option>
-                        <option value="7">Top 7</option>
-                        <option value="8">Top 8</option>
-                    </select>
-
                     <button type="button" id="submitButton2">Rechercher</button>
                 </form>
             </div>
-
         </div>
-    </body>
+
+    </div>
+</body>
 </html>
-             
+                

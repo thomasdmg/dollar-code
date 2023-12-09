@@ -1,26 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
   <meta charset="UTF-8">
-  
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../view/index.css">
 
-  <script src="../model/etude_chart.js"></script>
-  <script src="../model/experience_chart.js"></script>
-
-  <script src="../model/exchange_rates.js"></script>
-  <script src="../model/const.js"></script>
-  
-  <script src="../config/config.js"></script>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <title>Dollar-code</title>
+
 </head>
+
 <body>
     <div class="main-container">
       
@@ -34,7 +23,8 @@
             <div class="nav-links">
                 <ul>
                     <!-- Lien des différents graphiques -->
-                    <a href="../view/index.html"><li>Experience / Etudes </li></a>
+                    <a href="../view/index.html"><li>Accueil</li></a>
+                    <a href="../view/experience.html"><li>Experience / Etudes </li></a>
                     <a href="../view/competences.html"><li>Compétences</li></a>
                     <a href="../view/preferences.html"><li>Préférences</li></a>
                 </ul>
@@ -43,48 +33,23 @@
         </div>
 
         <div class="main-content">
-            <h2>Experience & Etudes</h2>
-            <h3>Salaire moyen en fonction du pays & du niveau d'étude</h3>
+            <br>
+            <h1>Bienvenu sur Dollar-code !</h1><br>
+            <p class="accueil_desc"><strong>Présentation :</strong><br><br> Dollar-Code est une plateforme qui affiche des statistiques sur les développeurs, basées sur une enquête réalisée par Slack. Obtenez des insights sur les tendances,
+                 les compétences et les outils préférés des développeurs grâce à notre interface.
+                Parfait pour rester à jour ou prendre des décisions éclairées en matière de recrutement. 
+            </p>
 
-            <div class="chart_bar">
-                <canvas id="chart"></canvas>
-            </div>
-            <div class="filter-bar">
-                <form>
-                    <select id="zoneSelect">
-                        <option value="">Sélectionnez la zone géographique</option>
-                        <option value="WE">Europe</option>
-                        <option value="NA">Amérique du Nord</option>
-                    </select>
-                    
-                    <select id="countrySelect">
-                        <option value="">Sélectionnez le pays</option>
-                    </select>
-                   
-                    <button type="button" id="submitButton">Rechercher</button>
-                </form>
-            </div>
-            <h3>Salaire moyen en fonction du pays & de l'expérience</h3>
+            <p class="accueil_desc">
+                <strong>Remarque :</strong> </br></br>
+                Pour chaque graphique, il y a la possibilité de modulé les données affichées à l'aide de filtres. Si certains graphique n'affichent pas de données avec certains filtres,
+                c'est que les données sont soit inexistantes, soit jugées non représentatives.
+            </p>
 
-            <div class="chart_bar">
-                <canvas id="chart2"></canvas>
-            </div>
-            <div class="filter-bar">
-                <form>
-                    <select id="zoneSelect2">
-                        <option value="">Sélectionnez la zone géographique</option>
-                        <option value="WE">Europe</option>
-                        <option value="NA">Amérique du Nord</option>
-                    </select>
-                    <select id="countrySelect2">
-                        <option value="">Sélectionnez le pays</option>
-                    </select>
-                    <button type="button" id="submitButton2">Rechercher</button>
-                </form>
-            </div>
+            <p class="accueil_desc"><strong>Cadre :</strong> </br></br> Ce projet a été réalisé dans le cadre de la ressource R5.C.04 - Programmation au format web des informations décisionnelles au sein de l'université 
+                Paul Sabatier de Toulouse. 
+            </p>
         </div>
-
     </div>
 </body>
 </html>
-                

@@ -157,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
-        // console.log(averageSalaryPlatform);
         var sortedArray = Object.entries(averageSalaryPlatform);
 
         sortedArray.sort(function(a, b) {
@@ -169,23 +168,84 @@ document.addEventListener('DOMContentLoaded', function() {
           sortedAverageSalaryPlatform[item[0]] = item[1];
         });
 
-        // console.log(sortedAverageSalaryPlatform);
-        
-        // On remplace les clés par les valeurs de cloudPlatformListKey
-        var updatedSortedAverageSalaryPlatform = {};
+        var listSalaryPerPlateforme = {};
+        // Calcul de la médiane
+        jsonData.forEach(function(item) {
+          if (
+            item.Country === country &&
+            item.Currency !== "NA" &&
+            item.CompTotal !== "NA" &&
+            parseInt(item.CompTotal) > 0 &&
+            convert(item.CompTotal, item.Currency) < 1000000 &&
+            item.PlatformHaveWorkedWith !== "NA" &&
+            item.YearsCodePro !== "NA" &&
+            item.YearsCodePro >= experience_min &&
+            item.YearsCodePro < experience_max
+          ) {
+            Object.keys(cloudPlatformListKey).forEach(function(plateforme) {
+              if (item.PlatformHaveWorkedWith.includes(plateforme)) {
+                if (listSalaryPerPlateforme.hasOwnProperty(plateforme)) {
+                  listSalaryPerPlateforme[plateforme].push(Math.round(convert(item.CompTotal, item.Currency)/12));
+                } else {
+                  listSalaryPerPlateforme[plateforme] = [Math.round(convert(item.CompTotal, item.Currency)/12)];
+                }
+              }
+            });
+          }
+        });
 
-        Object.keys(sortedAverageSalaryPlatform).forEach(function(item) {
+        // Trie les salaires de chaque plateforme par ordre croissant
+        Object.keys(listSalaryPerPlateforme).forEach(function(plateforme) {
+          listSalaryPerPlateforme[plateforme].sort(function(a, b) {
+            return b - a;
+          });
+        });
+
+        // Si le nombre de salaires est impair, la médiane est le salaire du milieu sinon c'est la moyenne des 2 salaires du milieu
+        var medianSalaryPerPlateforme = {};
+        Object.keys(listSalaryPerPlateforme).forEach(function(plateforme) {
+          var list = listSalaryPerPlateforme[plateforme];
+          var median;
+          if (parseInt(list.length % 2) === 0) {
+            median = (list[list.length / 2 - 1] + list[list.length / 2]) / 2;
+          } else {
+            median = list[Math.floor(list.length / 2)];
+          }
+          medianSalaryPerPlateforme[plateforme] = median;
+        });
+        
+        //On crée un objet avec une clé associée à plusieurs valeurs
+        var finalList = {};
+        Object.keys(medianSalaryPerPlateforme).forEach(function(plateforme) {
+          if (listSalaryPerPlateforme[plateforme].length >= 10) {
+            finalList[plateforme] = [averageSalaryPlatform[plateforme], medianSalaryPerPlateforme[plateforme]];
+          }
+        });
+
+        console.log(finalList);
+
+
+        // On remplace les clés par les valeurs de cloudPlatformListKey
+        var shortedLabelList = {};
+
+        Object.keys(sortedArray).forEach(function(item) {
 
           if (cloudPlatformListKey[item]) {
             
             var updatedKey = cloudPlatformListKey[item];
 
-            updatedSortedAverageSalaryPlatform[updatedKey] = sortedAverageSalaryPlatform[item];
+            shortedLabelList[updatedKey] = sortedArray[item];
           }
         });
 
-        // console.log(updatedSortedAverageSalaryPlatform);
-
+        var sortedFinalList = Object.fromEntries(
+          Object.entries(finalList)
+            .sort(function(a, b) {
+              return b[1][0] - a[1][0];
+            })
+        );
+        
+        console.log(sortedFinalList);
         
         
         // Crée un graphique avec les données récupérées chart.js
@@ -199,23 +259,42 @@ document.addEventListener('DOMContentLoaded', function() {
         chart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: Object.keys(updatedSortedAverageSalaryPlatform),
-            datasets: [{
-              label: 'Salaire moyen / plateforme en €',
-              backgroundColor: "rgba(45, 198, 83, 0.6)",
-              borderColor: "rgba(45, 198, 83, 0.6)",
-              data: Object.values(updatedSortedAverageSalaryPlatform)
-            }]
+            labels: Object.keys(sortedFinalList),
+            datasets: [
+              {
+                type: "bar",
+                label: "Salaire moyen (EUR)",
+                data: Object.values(sortedFinalList).map(function (values) {
+                            return values[0]; 
+                          }),
+                backgroundColor: "rgba(45, 198, 83, 0.6)",
+                borderColor: "rgba(45, 198, 83, 0.6)",
+                borderWidth: 1,
+              },
+              {
+                type: "line",
+                label: "Médiane (EUR)",
+                data: Object.values(sortedFinalList).map(function (values) {
+                      return values[1];
+                    }),
+                backgroundColor: "rgba(255, 0, 0, 0.5)",
+                borderColor: "rgba(255, 0, 0, 1)",
+                borderWidth: 1,
+                fill: false,
+              },
+            ],
           },
           options: {
             scales: {
-              yAxes: {
-                ticks: {
-                  beginAtZero: true,
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Salaires Mensuel en €'
                 }
-              }
-            }
-          }
+              },
+            },
+          },
         });
         myChart = chart;
       }
@@ -309,50 +388,132 @@ document.addEventListener('DOMContentLoaded', function() {
         sortedAverageSalaryPlatform[item[0]] = item[1];
       });
 
+      var listSalaryPerPlateforme = {};
+      // Calcul de la médiane
+      jsonData.forEach(function(item) {
+        if (
+          item.Country === country &&
+          item.Currency !== "NA" &&
+          item.CompTotal !== "NA" &&
+          parseInt(item.CompTotal) > 0 &&
+          convert(item.CompTotal, item.Currency) < 1000000 &&
+          item.PlatformHaveWorkedWith !== "NA" &&
+          item.YearsCodePro !== "NA"
+        ) {
+          Object.keys(cloudPlatformListKey).forEach(function(plateforme) {
+            if (item.PlatformHaveWorkedWith.includes(plateforme)) {
+              if (listSalaryPerPlateforme.hasOwnProperty(plateforme)) {
+                listSalaryPerPlateforme[plateforme].push(Math.round(convert(item.CompTotal, item.Currency)/12));
+              } else {
+                listSalaryPerPlateforme[plateforme] = [Math.round(convert(item.CompTotal, item.Currency)/12)];
+              }
+            }
+          });
+        }
+      });
+
+      // Trie les salaires de chaque plateforme par ordre croissant
+      Object.keys(listSalaryPerPlateforme).forEach(function(plateforme) {
+        listSalaryPerPlateforme[plateforme].sort(function(a, b) {
+          return b - a;
+        });
+      });
+
+      // Si le nombre de salaires est impair, la médiane est le salaire du milieu sinon c'est la moyenne des 2 salaires du milieu
+      var medianSalaryPerPlateforme = {};
+      Object.keys(listSalaryPerPlateforme).forEach(function(plateforme) {
+        var list = listSalaryPerPlateforme[plateforme];
+        var median;
+        if (parseInt(list.length % 2) === 0) {
+          median = (list[list.length / 2 - 1] + list[list.length / 2]) / 2;
+        } else {
+          median = list[Math.floor(list.length / 2)];
+        }
+        medianSalaryPerPlateforme[plateforme] = median;
+      });
+      
+      //On crée un objet avec une clé associée à plusieurs valeurs
+      var finalList = {};
+      Object.keys(medianSalaryPerPlateforme).forEach(function(plateforme) {
+        if (listSalaryPerPlateforme[plateforme].length >= 10) {
+          finalList[plateforme] = [averageSalaryPlatform[plateforme], medianSalaryPerPlateforme[plateforme]];
+        }
+      });
+
+      console.log(finalList);
+
+
       // On remplace les clés par les valeurs de cloudPlatformListKey
-      var updatedSortedAverageSalaryPlatform = {};
+      var shortedLabelList = {};
 
-      Object.keys(sortedAverageSalaryPlatform).forEach(function(item) {
+      Object.keys(sortedArray).forEach(function(item) {
 
-         if (cloudPlatformListKey[item]) {
-           
-           var updatedKey = cloudPlatformListKey[item];
+        if (cloudPlatformListKey[item]) {
+          
+          var updatedKey = cloudPlatformListKey[item];
 
-           updatedSortedAverageSalaryPlatform[updatedKey] = sortedAverageSalaryPlatform[item];
-         }
-       });
+          shortedLabelList[updatedKey] = sortedArray[item];
+        }
+      });
 
-      // graphique
+      var sortedFinalList = Object.fromEntries(
+        Object.entries(finalList)
+          .sort(function(a, b) {
+            return b[1][0] - a[1][0];
+          })
+      );
+      
+      console.log(sortedFinalList);
+      
+      
+      // Crée un graphique avec les données récupérées chart.js
+      var ctx = document.getElementById('chart').getContext('2d');
 
-       // Crée un graphique avec les données récupérées chart.js
-       var ctx = document.getElementById('chart').getContext('2d');
+      // S'il existe déjà un diagramme, le détruire
+      if (typeof myChart !== 'undefined' && myChart !== null) {
+        myChart.destroy();
+      }
 
-       // S'il existe déjà un diagramme, le détruire
-       if (typeof myChart !== 'undefined' && myChart !== null) {
-         myChart.destroy();
-       }
-
-       chart = new Chart(ctx, {
-         type: 'bar',
-         data: {
-           labels: Object.keys(updatedSortedAverageSalaryPlatform),
-           datasets: [{
-             label: 'Salaire moyen / plateforme en €',
-             backgroundColor: "rgba(45, 198, 83, 0.6)",
-             borderColor: "rgba(45, 198, 83, 0.6)",
-             data: Object.values(updatedSortedAverageSalaryPlatform)
-           }]
-         },
-         options: {
-           scales: {
-             yAxes: {
-               ticks: {
-                 beginAtZero: true,
-               }
-             }
-           }
-         }
-       });
-       myChart = chart;
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(sortedFinalList),
+          datasets: [
+            {
+              type: "bar",
+              label: "Salaire moyen (EUR)",
+              data: Object.values(sortedFinalList).map(function (values) {
+                          return values[0]; 
+                        }),
+              backgroundColor: "rgba(45, 198, 83, 0.6)",
+              borderColor: "rgba(45, 198, 83, 0.6)",
+              borderWidth: 1,
+            },
+            {
+              type: "line",
+              label: "Médiane (EUR)",
+              data: Object.values(sortedFinalList).map(function (values) {
+                    return values[1];
+                  }),
+              backgroundColor: "rgba(255, 0, 0, 0.5)",
+              borderColor: "rgba(255, 0, 0, 1)",
+              borderWidth: 1,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Salaires Mensuel en €'
+              }
+            },
+          },
+        },
+      });
+      myChart = chart;
     }
 });

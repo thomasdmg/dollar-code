@@ -34,7 +34,8 @@
             <div class="nav-links">
                 <ul>
                     <!-- Lien des différents graphiques -->
-                    <a href="../view/index.html"><li>Experience / Etudes </li></a>
+                    <a href="../view/index.html"><li>Accueil</li></a>
+                    <a href="../view/experience.html"><li>Experience / Etudes </li></a>
                     <a href="../view/competences.html"><li>Compétences</li></a>
                     <a href="../view/preferences.html"><li>Préférences</li></a>
                 </ul>
@@ -44,7 +45,10 @@
 
         <div class="main-content">
             <h2>Compétences</h2>
-            <h4>*Pour chaque graphique, il y a possibilité de séléctionné ou non le nombre d'années d'experience</h4>
+            <p> 
+                <strong>Remarque :</strong> </br></br>
+                Pour chaque graphique, il y a possibilité de sélectionné ou non le nombre d'années d'expérience.
+            </p>
             <h3>Salaire moyen en fonction du pays, de l'expérience & des plateformes clouds utilisé</h3>
             <div class="chart_bar">
                 <canvas id="chart"></canvas>
@@ -67,10 +71,11 @@
                         <option value="15-20">Entre 15 & 20 ans</option>
                         <option value="20-25">Entre 20 & 25 ans</option>
                         <option value="25-30">Entre 25 & 30 ans</option>
-                        <option value="30-35">Entre 30 & 35 ans</option>
-                        <option value="35-40">Entre 35 & 40 ans</option>
+                        <!-- Pour compenser le manque de valeurs -->
+                        <option value="30-50">30 ans et plus</option>
+                        <!-- <option value="35-40">Entre 35 & 40 ans</option>
                         <option value="40-45">Entre 40 & 45 ans</option>
-                        <option value="45-50">Entre 45 & 50 ans</option>
+                        <option value="45-50">Entre 45 & 50 ans</option> -->
                     </select>
                     <button type="button" id="submitButton">Rechercher</button>
                 </form>
@@ -100,9 +105,11 @@
                         <option value="20-25">Entre 20 & 25 ans</option>
                         <option value="25-30">Entre 25 & 30 ans</option>
                         <option value="30-35">Entre 30 & 35 ans</option>
-                        <option value="35-40">Entre 35 & 40 ans</option>
+                        <!-- Pour compenser le manque de valeurs -->
+                        <option value="30-50">30 ans et plus</option> 
+                        <!-- <option value="35-40">Entre 35 & 40 ans</option>
                         <option value="40-45">Entre 40 & 45 ans</option>
-                        <option value="45-50">Entre 45 & 50 ans</option>
+                        <option value="45-50">Entre 45 & 50 ans</option> -->
                     </select>
                     <button type="button" id="submitButton2">Rechercher</button>
                 </form>

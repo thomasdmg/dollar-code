@@ -83,5 +83,15 @@ h2, h3, h4, li{
 margin-bottom: 30px;
 }
 
+p{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    margin: 10px;
+}
+
+.accueil_desc{
+    text-align: justify;
+}
+
 
 
